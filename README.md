@@ -1,6 +1,10 @@
-###Final project of DBMS. ###
+# Final project of DBMS
+
+需求：
 
 ![1](image/requirements.png)
+
+ER图：
 
 ![2](image/er.png)
 
