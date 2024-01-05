@@ -1,0 +1,403 @@
+-- 药品信息表（medicine）
+CREATE TABLE IF NOT EXISTS medicine (
+    medicine_id INT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL
+) charset = utf8;
+
+-- 仓库信息表（warehouse）
+CREATE TABLE IF NOT EXISTS warehouse (
+    warehouse_id INT PRIMARY KEY NOT NULL,
+    address VARCHAR(255) NOT NULL
+) charset = utf8;
+
+-- 员工信息表（employee）
+CREATE TABLE IF NOT EXISTS employee (
+    employee_id INT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    position VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    passw VARCHAR(255) NOT NULL
+) charset = utf8;
+
+-- 客户信息表（customer）
+CREATE TABLE IF NOT EXISTS customer (
+    customer_id INT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL
+) charset = utf8;
+
+-- 供应商信息表（supplier）
+CREATE TABLE IF NOT EXISTS supplier (
+    supplier_id INT PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL
+) charset = utf8;
+
+-- 进货记录表（stock）
+CREATE TABLE IF NOT EXISTS stock (
+    stock_id INT PRIMARY KEY NOT NULL,
+    num INT,
+    price FLOAT,
+    date_ DATE
+) charset = utf8;
+
+-- 订单表（order）
+CREATE TABLE IF NOT EXISTS order_table (
+    order_id INT PRIMARY KEY NOT NULL,
+    num INT,
+    price FLOAT,
+    type_ VARCHAR(255),
+    date_ DATE
+) charset = utf8;
+
+-- 进货报表（stock_report）
+CREATE TABLE IF NOT EXISTS stock_report (
+    stock_report_id INT PRIMARY KEY NOT NULL,
+    medicine_id INT,
+    total_num INT,
+    total_price FLOAT,
+    date_ DATE,
+    FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- 销售报表（sales_report）
+CREATE TABLE IF NOT EXISTS sales_report (
+    sales_report_id INT PRIMARY KEY NOT NULL,
+    medicine_id INT,
+    total_num INT,
+    total_price FLOAT,
+    date_ DATE,
+    FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- 财务统计表（financial_statement）
+CREATE TABLE IF NOT EXISTS financial_statement (
+    financial_statement_id INT PRIMARY KEY NOT NULL,
+    date_ DATE,
+    stock_price FLOAT,
+    sales_price FLOAT,
+    profit FLOAT
+) charset = utf8;
+
+-- 联系集
+
+-- supply
+CREATE TABLE IF NOT EXISTS supply (
+    supplier_id INT,
+    stock_id INT,
+    PRIMARY KEY (supplier_id, stock_id),
+    FOREIGN KEY (supplier_id) REFERENCES supplier (supplier_id) ON DELETE CASCADE,
+    FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- st_report
+CREATE TABLE IF NOT EXISTS st_report (
+    stock_id INT,
+    stock_report_id INT,
+    PRIMARY KEY (stock_id, stock_report_id),
+    FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE,
+    FOREIGN KEY (stock_report_id) REFERENCES stock_report (stock_report_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- st_constitute
+CREATE TABLE IF NOT EXISTS st_constitute (
+    stock_report_id INT,
+    financial_statement_id INT,
+    PRIMARY KEY (stock_report_id, financial_statement_id),
+    FOREIGN KEY (stock_report_id) REFERENCES stock_report (stock_report_id) ON DELETE CASCADE,
+    FOREIGN KEY (financial_statement_id) REFERENCES financial_statement (financial_statement_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- medicine_stock
+CREATE TABLE IF NOT EXISTS medicine_stock (
+    medicine_id INT,
+    stock_id INT,
+    PRIMARY KEY (medicine_id, stock_id),
+    FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id) ON DELETE CASCADE,
+    FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- warehouse_stock
+CREATE TABLE IF NOT EXISTS warehouse_stock (
+    warehouse_id INT,
+    stock_id INT,
+    PRIMARY KEY (warehouse_id, stock_id),
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse (warehouse_id) ON DELETE CASCADE,
+    FOREIGN KEY (stock_id) REFERENCES stock (stock_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- store
+CREATE TABLE IF NOT EXISTS store (
+    medicine_id INT,
+    warehouse_id INT,
+    num INT,
+    PRIMARY KEY (medicine_id, warehouse_id),
+    FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id) ON DELETE CASCADE,
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse (warehouse_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- sa_constitute
+CREATE TABLE IF NOT EXISTS sa_constitute (
+    sales_report_id INT,
+    financial_statement_id INT,
+    PRIMARY KEY (sales_report_id, financial_statement_id),
+    FOREIGN KEY (sales_report_id) REFERENCES sales_report (sales_report_id) ON DELETE CASCADE,
+    FOREIGN KEY (financial_statement_id) REFERENCES financial_statement (financial_statement_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- medicine_order
+CREATE TABLE IF NOT EXISTS medicine_order (
+    medicine_id INT,
+    order_id INT,
+    PRIMARY KEY (medicine_id, order_id),
+    FOREIGN KEY (medicine_id) REFERENCES medicine (medicine_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES order_table (order_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- warehouse_order
+CREATE TABLE IF NOT EXISTS warehouse_order (
+    warehouse_id INT,
+    order_id INT,
+    PRIMARY KEY (warehouse_id, order_id),
+    FOREIGN KEY (warehouse_id) REFERENCES warehouse (warehouse_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES order_table (order_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- sa_report
+CREATE TABLE IF NOT EXISTS sa_report (
+    order_id INT,
+    sales_report_id INT,
+    PRIMARY KEY (order_id, sales_report_id),
+    FOREIGN KEY (order_id) REFERENCES order_table (order_id) ON DELETE CASCADE,
+    FOREIGN KEY (sales_report_id) REFERENCES sales_report (sales_report_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- place (customer_order)
+CREATE TABLE IF NOT EXISTS place (
+    customer_id INT,
+    order_id INT,
+    PRIMARY KEY (customer_id, order_id),
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES order_table (order_id) ON DELETE CASCADE
+) charset = utf8;
+
+-- process (employee_order)
+CREATE TABLE IF NOT EXISTS process (
+    employee_id INT,
+    order_id INT,
+    PRIMARY KEY (employee_id, order_id),
+    FOREIGN KEY (employee_id) REFERENCES employee (employee_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES order_table (order_id) ON DELETE CASCADE
+) charset = utf8;
+
+
+
+# ----------------------------- 报告维护 --------------------------------- #
+DELIMITER //
+
+CREATE PROCEDURE update_sales_report_and_sa_report()
+BEGIN
+    -- 获取当前日期
+    DECLARE current_date_var DATE;
+    SET current_date_var = CURDATE();
+
+    -- 更新销售报表
+    INSERT INTO sales_report (medicine_id, total_num, total_price, date_)
+    SELECT medicine_id, SUM(num), SUM(price), current_date_var
+    FROM order_table
+    WHERE date_ = current_date_var
+    GROUP BY medicine_id
+    ON DUPLICATE KEY UPDATE
+        total_num = VALUES(total_num),
+        total_price = VALUES(total_price);
+
+    -- 更新联系集
+    INSERT INTO sa_report (order_id, sales_report_id)
+    SELECT o.order_id, s.sales_report_id
+    FROM order_table o
+    JOIN sales_report s ON o.medicine_id = s.medicine_id
+    WHERE o.date_ = current_date_var;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE update_stock_report_and_st_report()
+BEGIN
+    -- 获取当前日期
+    DECLARE current_date_var DATE;
+    SET current_date_var = CURDATE();
+
+    -- 更新进货报表
+    INSERT INTO stock_report (medicine_id, total_num, total_price, date_)
+    SELECT medicine_id, SUM(num), SUM(price), current_date_var
+    FROM stock
+    WHERE date_ = current_date_var
+    GROUP BY medicine_id
+    ON DUPLICATE KEY UPDATE
+        total_num = VALUES(total_num),
+        total_price = VALUES(total_price);
+
+    -- 更新联系集
+    INSERT INTO st_report (stock_id, stock_report_id)
+    SELECT s.stock_id, sr.stock_report_id
+    FROM stock s
+    JOIN stock_report sr ON s.medicine_id = sr.medicine_id
+    WHERE s.date_ = current_date_var;
+END //
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE EVENT IF NOT EXISTS daily_update_event
+ON SCHEDULE EVERY 1 DAY
+STARTS TIMESTAMP(CURDATE() + INTERVAL 1 DAY)
+DO
+BEGIN
+    CALL update_sales_report_and_sa_report();
+    CALL update_stock_report_and_st_report();
+END //
+
+DELIMITER ;
+
+# ----------------------------- 建表 --------------------------------- #
+insert into medicine(medicine_id,name) values (1,'Asprin'),(2,'Ibuprofen'),(3,'Redoxon');
+insert into warehouse(warehouse_id,address) values (1,'SYSU'),(2,'SCUT'),(3,'PKU');
+insert into supplier(supplier_id,name,phone_number,address) values (1,'bys','10086','GZ'),(2,'xx','10016','SZ'),(3,'lhs','12315,'BJ,);
+insert into customer(customer_id,name,phone_number) values (1,'ymz','666'),(2,'csy','777'),(3,'xy','888');
+insert into employee(employee_id,name,position,phone_number,passw) values (1,'Adam','admin','110','1'),(2,'TZJ','admin','119','2'),(3,'TZ','admin','120','3');
+
+
+
+# ------------------------- 身份证号触发器 ------------------------------- #
+delimiter //
+# 创建函数判断是否为 15 位或 18 位数字
+create function isvalid(str varchar(18))
+	returns int
+begin
+	declare ret int default 0;
+	if isnull(str) then return 0; end if;
+	if str='' then return 0; end if;
+	select str regexp '^[0-9]*$' into ret;
+	if ret=0 then return 0; end if;
+    if length(str) = 15 or length(str) = 18 then return 1;
+    else return 0; end if;
+end //
+
+create trigger cid_tr before insert on customer
+for each row
+begin
+	if isvalid(new.cid)=0 then
+	signal sqlstate '45000' set message_text = 'invalid customer id.';
+    end if;
+end//
+
+
+
+
+# ----------------------------- 联系方式触发器 ---------------------------- #
+# 创建函数判断是否为 11 位数字
+
+delimiter //
+create function istel (str varchar(20))
+    returns int
+begin
+    declare ret int default 0;
+	if isnull(str) then return 0; end if;
+	if str='' then return 0; end if;
+	select str regexp '^[0-9]*$' into ret;
+	if ret=0 then return 0; end if;
+    if length(str) = 11 then return 1;
+    else return 0; end if;
+end //
+
+show triggers tel_tr
+create trigger tel_tr before insert on customer
+for each row
+begin
+    if istel(new.tel)=0 then
+	    signal sqlstate '45000' set message_text = 'invalid tel number.';
+    end if;
+end //
+
+create trigger tel_update_tr before update on customer
+for each row
+begin
+    if istel(new.tel) =0 then
+        signal sqlstate '45000' set message_text = 'invalid tel number.';
+    end if;
+end //
+
+# ------------------------------------------------------------------------- #
+
+delimiter ;
+
+
+create user s2 identified by 'p2';
+grant select, update, insert on hotel.customer to s2;
+grant select, update, insert on hotel.stay to s2;
+grant insert on hotel.financial to s2;
+grant select, update, insert on hotel.sequenceinfo to s2;
+grant select on hotel.room to s2;
+
+create user m1 identified by 'm1';
+grant select, update, insert on hotel.customer to m1;
+grant select, update, insert on hotel.stay to m1;
+grant insert, select on hotel.financial to m1;
+grant select, update, insert on hotel.sequenceinfo to m1;
+grant select, update, insert, delete on hotel.room to m1;
+
+
+# -------------------------- 创建入住办理的存储过程 --------------------------------- #
+
+create procedure live_in_pro (sid int)
+begin
+    declare done boolean default 0;
+    declare rtype nvarchar(20);
+    declare sincount int default 0;
+    declare doucount int default 0;
+    declare bigcount int default 0;
+    declare sinsum double default 0;
+    declare dousum double default 0;
+    declare bigrsum double default 0;
+    declare cust_num int default 0;
+    declare rprice double;
+    declare curs cursor for (select type, price from sequenceinfo as s natural join stay natural join room where s.serialnum = sid and s.haspay=false and s.success=true);
+    declare continue handler for sqlstate '02000' set done = 1;
+
+    set sincount = 0;
+    set sinsum = 0;
+    set doucount = 0;
+    set dousum = 0;
+    set bigcount =0 ;
+    set bigrsum = 0;
+    set cust_num = 0;
+    open curs;
+    fetch curs into rtype, rprice;
+    repeat
+        if rtype = '单人房' then
+            set sincount = sincount + 1;
+            set sinsum = sinsum + rprice;
+        elseif rtype = '双人房' then
+            set doucount = doucount + 1;
+            set dousum = dousum + rprice;
+        elseif rtype = '大床房' then
+            set bigcount = bigcount + 1;
+            set bigrsum = bigrsum + rprice;
+        end if;
+        set cust_num = cust_num + 1;
+        fetch curs into rtype, rprice;
+    until done end repeat;
+    set bigrsum = bigrsum / 2;
+    set dousum = dousum / 2;
+    insert into financial values(sid, cust_num, sinsum+dousum+bigrsum, sincount, sinsum, doucount, dousum, bigcount, bigrsum);
+    update sequenceinfo set haspay=true, checkin=now() where serialnum = sid;
+end //
+
+# ------------------------------------------------------------------------------- #
+
+delimiter ;
