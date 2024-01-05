@@ -6,12 +6,7 @@ from tkinter import messagebox  # tkinter 弹窗
 from gui.login import login_page
 from gui.normal_page import normal_page
 from gui.head_info import head_handle
-from gui.customer import cust_page
-from gui.room import room_page
 from gui.report import *
-from gui.book import book_page
-from gui.inpage import in_page
-from gui.out import out_page
 
 from gui.base_info import base_info
 from gui.medicine_info import medicine_info
