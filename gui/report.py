@@ -86,6 +86,9 @@ def report_finance_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_income_by_date(f"{date.year}-{date.month}-{date.day}")
         tree_index = 0
         if len(sql_results) == 0:
@@ -106,6 +109,9 @@ def report_finance_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_income_by_month(year, month)
         tree_index = 0
         if len(sql_results) == 0:
@@ -117,10 +123,14 @@ def report_finance_page(master, return_to_report_main_handle, handle):
                 tree_index += 1
 
     def look_by_year():
+        date = datetime.today()
         year = datetime.now().year
         x = tree.get_children()
         for item in x:
             tree.delete(item)
+
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
 
         sql_results = handle.select_income_by_year(year)
         tree_index = 0
@@ -176,13 +186,15 @@ def report_stock_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_stock_by_date(f"{date.year}-{date.month}-{date.day}")
         tree_index = 0
         if len(sql_results) == 0:
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
@@ -196,21 +208,26 @@ def report_stock_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_stock_by_month(year, month)
         tree_index = 0
         if len(sql_results) == 0:
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
     def look_by_year():
+        date = datetime.today()
         year = datetime.now().year
         x = tree.get_children()
         for item in x:
             tree.delete(item)
+
+        handle.update_or_create_stock_report(f"{date.year}-{date.month}-{date.day}")
 
         sql_results = handle.select_stock_by_year(year)
         tree_index = 0
@@ -218,7 +235,7 @@ def report_stock_page(master, return_to_report_main_handle, handle):
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
@@ -265,13 +282,15 @@ def report_sales_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_sales_by_date(f"{date.year}-{date.month}-{date.day}")
         tree_index = 0
         if len(sql_results) == 0:
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
@@ -285,21 +304,26 @@ def report_sales_page(master, return_to_report_main_handle, handle):
         for item in x:
             tree.delete(item)
 
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
+
         sql_results = handle.select_sales_by_month(year, month)
         tree_index = 0
         if len(sql_results) == 0:
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
     def look_by_year():
+        date = datetime.today()
         year = datetime.now().year
         x = tree.get_children()
         for item in x:
             tree.delete(item)
+
+        handle.update_or_create_sales_report(f"{date.year}-{date.month}-{date.day}")
 
         sql_results = handle.select_sales_by_year(year)
         tree_index = 0
@@ -307,7 +331,7 @@ def report_sales_page(master, return_to_report_main_handle, handle):
             tree.insert('', tree_index, values=(0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 
@@ -359,10 +383,10 @@ def report_warehouse_page(master, return_to_report_main_handle, handle):
         sql_results = handle.select_warehouse_for_report()
         tree_index = 0
         if len(sql_results) == 0:
-            tree.insert('', tree_index, values=(0, 0, 0, 0, 0, 0, 0, 0))
+            tree.insert('', tree_index, values=(0, 0, 0, 0, 0))
         else:
             for sql_result in sql_results:
-                new_result = (sql_result[0], sql_result[1], sql_result[2] - sql_result[4], sql_result[3] - sql_result[5], sql_result[2], sql_result[3], sql_result[4], sql_result[5])
+                new_result = (sql_result[0], sql_result[1], sql_result[2], sql_result[3], sql_result[4])
                 tree.insert('', tree_index, values=new_result)
                 tree_index += 1
 

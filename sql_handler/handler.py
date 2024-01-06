@@ -352,13 +352,126 @@ class handler:
 
 
     # 查询某日收入情况
+
+    def update_or_create_stock_report(self, currdate):
+        try:
+            with self.connect.cursor() as cursor:
+                 # 查询最新的 stock_report_id
+                max_id_query = "SELECT MAX(stock_report_id) FROM stock_report"
+                cursor.execute(max_id_query)
+                max_id = cursor.fetchone()[0]
+
+                # 如果没有记录，设置为1，否则加1
+                new_report_id = 1 if max_id is None else max_id + 1
+
+
+                # 查询给定日期的库存总数和总价格
+                query = """
+                    SELECT
+                        medicine_id,
+                        SUM(num) AS total_num,
+                        SUM(price) AS total_price
+                    FROM
+                        stock natural join medicine_stock
+                    WHERE
+                        date_ = %s
+                    GROUP BY
+                        medicine_id
+                """
+                print(query)
+                cursor.execute(query, (currdate,))
+                calculated_totals = cursor.fetchall()
+
+                if calculated_totals:
+                    for totals in calculated_totals:
+                        # print(totals)
+                        # 检查给定日期是否有对应报表
+                        report_query = "SELECT * FROM stock_report WHERE medicine_id = %s AND date_ = %s"
+                        cursor.execute(report_query, (totals[0], currdate))
+                        existing_report = cursor.fetchone()
+
+                        if existing_report:
+                            # 如果报表已存在，则更新记录
+                            update_query = "UPDATE stock_report SET total_num = %s, total_price = %s WHERE stock_report_id = %s"
+                            cursor.execute(update_query, (totals[1], totals[2], existing_report[0]))
+                        else:
+                            # 如果报表不存在，则创建新记录
+                            insert_query = "INSERT INTO stock_report (stock_report_id, medicine_id, total_num, total_price, date_) VALUES (%s, %s, %s, %s, %s)"
+                            cursor.execute(insert_query, (new_report_id, totals[0], totals[1], totals[2], currdate))
+                            new_report_id += 1
+
+                    # 提交更改
+                    self.connect.commit()
+
+        except Exception as e:
+            # 处理异常
+            print(f"Error: {e}")
+
+    def update_or_create_sales_report(self, currdate):
+        try:
+            with self.connect.cursor() as cursor:
+                # 查询最新的 sales_report_id
+                max_id_query = "SELECT MAX(sales_report_id) FROM sales_report"
+                cursor.execute(max_id_query)
+                max_id = cursor.fetchone()[0]
+
+                # 如果没有记录，设置为1，否则加1
+                new_report_id = 1 if max_id is None else max_id + 1
+
+                # 查询给定日期的销售总数和总价格
+                query = """
+                    SELECT
+                        mo.medicine_id,
+                        SUM(o.num) AS total_num,
+                        SUM(o.price) AS total_price
+                    FROM
+                        order_table o
+                        NATURAL JOIN medicine_order mo
+                    WHERE
+                        date_ = %s
+                    GROUP BY
+                        mo.medicine_id;
+                """
+                print(query)
+                cursor.execute(query, (currdate,))
+                calculated_totals = cursor.fetchall()
+
+                if calculated_totals:
+                    for totals in calculated_totals:
+                        print(totals)
+                        # 检查给定日期是否有对应报表
+                        report_query = "SELECT * FROM sales_report WHERE medicine_id = %s AND date_ = %s"
+                        cursor.execute(report_query, (totals[0], currdate))
+                        existing_report = cursor.fetchone()
+                        print(existing_report)
+
+                        if existing_report:
+                            # 如果报表已存在，则更新记录
+                            update_query = "UPDATE sales_report SET total_num = %s, total_price = %s WHERE sales_report_id = %s"
+                            cursor.execute(update_query, (totals[1], totals[2], existing_report[0]))
+                        else:
+                            # 如果报表不存在，则创建新记录
+                            insert_query = "INSERT INTO sales_report (sales_report_id, medicine_id, total_num, total_price, date_) VALUES (%s, %s, %s, %s, %s)"
+                            cursor.execute(insert_query, (new_report_id, totals[0], totals[1], totals[2], currdate))
+                            new_report_id += 1
+
+                    # 提交更改
+                    self.connect.commit()
+
+        except Exception as e:
+            # 处理异常
+            print(f"Error: {e}")
+
     def select_income_by_date(self, currDate):
-        sql_ = f"select medicine_id, medicine.name, " \
+        sql_ = f"select medicine.medicine_id, medicine.name, " \
                f"sum(stock_report.total_num), sum(stock_report.total_price), " \
-               f"sum(sales_report.total_num), sum(stock_report.total_price) " \
-               f"from stock_report natural join medicine natural join sales_report " \
-               f"where stock_report.date_ ='{currDate}' " \
+               f"sum(sales_report.total_num), sum(sales_report.total_price) " \
+               f"from stock_report " \
+               f"inner join medicine on stock_report.medicine_id = medicine.medicine_id " \
+               f"inner join sales_report on stock_report.medicine_id = sales_report.medicine_id " \
+               f"where stock_report.date_ ='{currDate}' and sales_report.date_ ='{currDate}' " \
                f"group by medicine_id, medicine.name;"
+        print("testing")
         print(sql_)
         self.cursor.execute(sql_)
         return self.cursor.fetchall()
@@ -384,7 +497,7 @@ class handler:
         return self.cursor.fetchall()
 
     def select_warehouse_for_report(self):
-        sql_ = f"select warehouse_id, warehouse.address " \
+        sql_ = f"select warehouse_id, warehouse.address, " \
                f"medicine_id, medicine.name, store.num " \
                f"from medicine natural join store natural join warehouse"
         print(sql_)
@@ -394,11 +507,14 @@ class handler:
 
     # 查询某月收入情况
     def select_income_by_month(self, year, month):
-        sql_ = f"select medicine_id, medicine.name, " \
+        sql_ = f"select medicine.medicine_id, medicine.name, " \
                f"sum(stock_report.total_num), sum(stock_report.total_price), " \
-               f"sum(sales_report.total_num), sum(stock_report.total_price) " \
-               f"from stock_report natural join medicine natural join sales_report " \
-                f"where year(stock_report.date_) = '{year}' and month(stock_report.date_) = '{month}' " \
+               f"sum(sales_report.total_num), sum(sales_report.total_price) " \
+               f"from stock_report " \
+               f"inner join medicine on stock_report.medicine_id = medicine.medicine_id " \
+               f"inner join sales_report on stock_report.medicine_id = sales_report.medicine_id " \
+               f"where year(stock_report.date_) = '{year}' and month(stock_report.date_) = '{month}' " \
+               f"and year(sales_report.date_) = '{year}' and month(sales_report.date_) = '{month}' " \
                f"group by medicine_id, medicine.name;"
         print(sql_)
         self.cursor.execute(sql_)
@@ -426,11 +542,13 @@ class handler:
 
     # 查询某年收入情况
     def select_income_by_year(self, year):
-        sql_ = f"select medicine_id, medicine.name, " \
+        sql_ = f"select medicine.medicine_id, medicine.name, " \
                f"sum(stock_report.total_num), sum(stock_report.total_price), " \
-               f"sum(sales_report.total_num), sum(stock_report.total_price) " \
-               f"from stock_report natural join medicine natural join sales_report " \
-               f"where year(stock_report.date_) = '{year}'" \
+               f"sum(sales_report.total_num), sum(sales_report.total_price) " \
+               f"from stock_report " \
+               f"inner join medicine on stock_report.medicine_id = medicine.medicine_id " \
+               f"inner join sales_report on stock_report.medicine_id = sales_report.medicine_id " \
+               f"where year(stock_report.date_) = '{year}' and  year(sales_report.date_) = '{year}' " \
                f"group by medicine_id, medicine.name;"
 
         print(sql_)
