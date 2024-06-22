@@ -1,4 +1,4 @@
-# Final project of DBMS
+# Final project of Software Engineering
 
 需求：
 
