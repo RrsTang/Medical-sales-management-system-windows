@@ -24,7 +24,7 @@ pip install pymysql
 bash run.sh
 ```
 ## Windows 11运行
-
+直接运行run.bat或者使用以下指令
 ```
 python gui/main.py
 ```
