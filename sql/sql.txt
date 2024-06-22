@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS db;
+
 -- 药品信息表（medicine）
 CREATE TABLE IF NOT EXISTS medicine (
     medicine_id INT PRIMARY KEY NOT NULL,
@@ -193,7 +195,9 @@ CREATE TABLE IF NOT EXISTS process (
 
 
 
-# ----------------------------- 报告维护 --------------------------------- #
+-- # ----------------------------- 报告维护 --------------------------------- #
+DROP PROCEDURE IF EXISTS update_sales_report_and_sa_report;
+
 DELIMITER //
 
 CREATE PROCEDURE update_sales_report_and_sa_report()
@@ -221,6 +225,8 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS update_stock_report_and_st_report;
 
 DELIMITER //
 
@@ -264,10 +270,10 @@ END //
 
 DELIMITER ;
 
-# ----------------------------- 建表 --------------------------------- #
-insert into medicine(medicine_id,name) values (1,'Asprin'),(2,'Ibuprofen'),(3,'Redoxon');
-insert into warehouse(warehouse_id,address) values (1,'SYSU'),(2,'SCUT'),(3,'PKU');
-insert into supplier(supplier_id,name,phone_number,address) values (1,'bys','10086','GZ'),(2,'xx','10016','SZ'),(3,'lhs','12315','BJ');
-insert into customer(customer_id,name,phone_number) values (1,'ymz','666'),(2,'csy','777'),(3,'xy','888');
-insert into employee(employee_id,name,position,phone_number,passw) values (1,'Adam','admin','110','1'),(2,'TZJ','admin','119','2'),(3,'TZ','admin','120','3');
+-- # ----------------------------- 建表 --------------------------------- #
+-- insert into medicine(medicine_id,name) values (1,'Asprin'),(2,'Ibuprofen'),(3,'Redoxon');
+-- insert into warehouse(warehouse_id,address) values (1,'SYSU'),(2,'SCUT'),(3,'PKU');
+-- insert into supplier(supplier_id,name,phone_number,address) values (1,'bys','10086','GZ'),(2,'xx','10016','SZ'),(3,'lhs','12315','BJ');
+-- insert into customer(customer_id,name,phone_number) values (1,'ymz','666'),(2,'csy','777'),(3,'xy','888');
+-- insert into employee(employee_id,name,position,phone_number,passw) values (1,'Adam','admin','110','1'),(2,'TZJ','admin','119','2'),(3,'TZ','admin','120','3');
 

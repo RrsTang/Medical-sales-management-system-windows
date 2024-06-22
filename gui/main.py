@@ -1,4 +1,18 @@
 import tkinter as tk
+import sys
+import os
+
+# 获取当前文件的绝对路径
+current_file_path = os.path.abspath(__file__)
+
+# 获取当前文件所在目录
+current_directory = os.path.dirname(current_file_path)
+
+# 获取上级目录
+parent_directory = os.path.dirname(current_directory)
+
+# 添加上级目录到sys.path
+sys.path.append(parent_directory)
 
 from sql_handler.handler import *  # sql 接口
 from sql_handler.config import *  # sql 配置文件
@@ -147,9 +161,9 @@ class MainUI:
         print(name)
         print(pwd)
         try:
-            self.hd.connect_sql('root', 'root')
-            pass_ = self.hd.select_all('employee')
+            self.hd.connect_sql('root', mysql_server_password)
             if not name == 'root' and pwd == 'root':
+                pass_ = self.hd.select_all('employee')
                 for item in pass_:
                     n = item[0]
                     p = item[4]
@@ -158,10 +172,13 @@ class MainUI:
                 else:
                     tk.messagebox.showerror(message='登录失败：请检查用户名和密码。')
                     return
-        except:
+        except Exception as e:
+            print(e)
             tk.messagebox.showerror(message='登录失败：请检查用户名和密码。')
             return
         print('log: Successfully connect database.')
+        print('loading tables...')
+        self.hd.execute_script_from_file('sql/sql.txt')
         self.usr_pwd.set("")
         self.login_page.destroy()
         # 渲染员工操作页面

@@ -7,9 +7,50 @@ class handler:
         self.connect = None
         self.cursor = None
 
+    def execute_script_from_file(self, file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                sql_script = file.read()
+
+            delimiter = ';'
+            commands = []
+            command_buffer = []
+
+            for line in sql_script.splitlines():
+                line = line.strip()
+                if not line or line.startswith('--'):  # 跳过空行或注释行
+                    continue
+                if line.upper().startswith('DELIMITER'):
+                    delimiter = line.split()[1]
+                    continue
+
+                if line.endswith(delimiter):
+                    command_buffer.append(line[:-len(delimiter)])
+                    commands.append(' '.join(command_buffer).strip())
+                    command_buffer = []
+                else:
+                    command_buffer.append(line)
+
+            if command_buffer:
+                commands.append(' '.join(command_buffer).strip())
+
+            for command in commands:
+                if command:  # 跳过空命令
+                    try:
+                        self.cursor.execute(command)
+                        # print(f"Executed command: {command}")
+                    except sql.MySQLError as e:
+                        print(f"Error executing command: {command}\n{e}")
+
+            print("Script executed successfully.")
+        except FileNotFoundError:
+            print(f"The file {file_path} does not exist.")
+        except Exception as e:
+            print(f"An unexpected error occurred while reading or executing the script: {e}")
+
     def select_all(self, table):
         self.cursor.execute("select * from {}".format(table))
-        t = self.cursor.fetchall()
+        t = self.cursor.fetchall() 
         return t
 
     def select_information_by_id(self, id_, table):
@@ -342,13 +383,19 @@ class handler:
         self.cursor = self.connect.cursor()
 
     def connect_sql(self, user, pwd):
-        self.connect = sql.connect(host=cf.host,
-                                   user=user,
-                                   password=pwd,
-                                   database=cf.database,
-                                   autocommit=True,
-                                   charset=cf.charset)
-        self.cursor = self.connect.cursor()
+        try:
+            self.connect = sql.connect(
+                host=cf.host,
+                user=user,
+                password=pwd,
+                database=cf.database,
+                autocommit=True,
+                charset=cf.charset
+            )
+            self.cursor = self.connect.cursor()
+            print("Connection established successfully.")
+        except sql.MySQLError as e:
+            print(f"Error connecting to MySQL: {e}")
 
 
     # 查询某日收入情况

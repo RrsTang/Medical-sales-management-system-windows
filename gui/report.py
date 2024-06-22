@@ -38,7 +38,7 @@ def report_main_page(master, mode, hd, handle=None):
     button_highlightbackground = '#688A7E'
     tk.Button(menus, text='财务报表', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_finance)\
-        .pack(side='top', padx=(left, right), pady=(100, 30))
+        .pack(side='top', padx=(left, right), pady=(80, 30))
     tk.Button(menus, text='入库报表', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_stock) \
         .pack(side='top', padx=(left, right), pady=(0, 30))
@@ -50,7 +50,7 @@ def report_main_page(master, mode, hd, handle=None):
         .pack(side='top', padx=(left, right), pady=(0, 30))
     tk.Button(menus, text='返回', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg='#ad0600', command=return_report_main) \
-        .pack(side='top', padx=(left, right), pady=(0, 70))
+        .pack(side='top', padx=(left, right), pady=(0, 0))
 
     menus.pack(side='left', fill='y', expand=True)
 

@@ -46,7 +46,7 @@ def normal_page(master, mode, hd, handle=None):
         .pack(side='top', padx=(left, right), pady=(0, 30))
     tk.Button(menus, text='进货管理', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_stock) \
-        .pack(side='top', padx=(left, right), pady=(0, 210))
+        .pack(side='top', padx=(left, right), pady=(0, 0))
 
     menus.pack(side='left', fill='y', expand=True)
 

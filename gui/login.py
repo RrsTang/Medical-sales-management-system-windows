@@ -46,7 +46,7 @@ def login_page(master, name, pwd, login_handle):
     btnFrame = tk.Frame(infoFrame, bg=bg)
     tk.Button(btnFrame, text='登录系统', relief=tk.RAISED, activebackground='white', font=myFont, width=31, height=1, fg=button_fg,
               bg=button_bg, command=login_handle, bd=4)\
-                    .pack(side='left', padx=(350, 0), pady=(80,100))
+                    .pack(side='left', padx=(350, 0), pady=(80,10))
     btnFrame.pack(side='top', anchor='nw')
 
     infoFrame.pack(fill='x')

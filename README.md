@@ -10,33 +10,23 @@ ER图：
 
 0. Prepare
 
-```
-sudo apt-get update
-sudo apt-get install mysql-server
-Install Conda
-conda create --name mysql python=3.8
-conda activate mysql
-conda install pymysql
-```
-
-1. 默认没密码，得配置密码
+   首先确保你有mysql环境，然后安装pymysql库
 
 ```
-sudo mysql
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-FLUSH PRIVILEGES;
+pip install pymysql
 ```
 
-2. 创建数据库
+1. 打开sql_handler/config.py，将其中的mysql_server_password改成你的mysql登录密码
 
-```
-CREATE DATABASE db;
-```
-复制sql.txt的建表语句
-
-3. 运行
+## Ubuntu运行
 
 ```
 bash run.sh
 ```
+## Windows 11运行
+
+```
+python gui/main.py
+```
+
 若是有奇怪的框框，参考解决方案https://segmentfault.com/a/1190000022249793
