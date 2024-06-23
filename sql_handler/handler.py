@@ -388,11 +388,13 @@ class handler:
                 host=cf.host,
                 user=user,
                 password=pwd,
-                database=cf.database,
+                # database=cf.database,
                 autocommit=True,
                 charset=cf.charset
             )
             self.cursor = self.connect.cursor()
+            self.cursor.execute("CREATE DATABASE IF NOT EXISTS db")
+            self.cursor.execute("USE db")
             print("Connection established successfully.")
         except sql.MySQLError as e:
             print(f"Error connecting to MySQL: {e}")

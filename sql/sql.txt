@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS db;
+
 
 -- 药品信息表（medicine）
 CREATE TABLE IF NOT EXISTS medicine (
