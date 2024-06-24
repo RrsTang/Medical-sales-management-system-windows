@@ -5,7 +5,7 @@ from sql_handler.handler import handler
 from tkinter import messagebox
 
 
-def employee_info(master, func, handle):
+def employee_info(master, func, handle, curr_operator):
     # 标题
     title = tk.Label(master, text='员工信息查询', font=('fangsong ti', 18, 'bold'), bg='white')\
         .pack(fill='x', side='top', pady=10)
@@ -95,6 +95,10 @@ def employee_info(master, func, handle):
             tree.insert('', i, values=ret[i])
 
     def add_employee():
+        if curr_operator != 'root':
+            print(curr_operator)
+            messagebox.showerror(message='权限不足')
+            return
         eid = add_id.get()
         name = add_name.get()
         poi = add_poi.get()
@@ -111,6 +115,9 @@ def employee_info(master, func, handle):
             messagebox.showerror(message='添加失败')
 
     def del_employee():
+        if curr_operator != 'root':
+            messagebox.showerror(message='权限不足')
+            return
         eid = add_id.get()
         name = add_name.get()
         poi = add_poi.get()
@@ -127,6 +134,9 @@ def employee_info(master, func, handle):
             messagebox.showerror(message='删除失败')
 
     def change_employee():
+        if curr_operator != 'root':
+            messagebox.showerror(message='权限不足')
+            return
         eid = change_id.get()
         info = change_info.get()
         item = mapp[change_item.get()]

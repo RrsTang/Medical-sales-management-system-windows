@@ -52,6 +52,7 @@ class MainUI:
         # 登录界面参数
         self.usr_name = tk.StringVar()
         self.usr_pwd = tk.StringVar()
+        self.current_operator = None
         print(self.usr_name)
         print(self.usr_pwd)
 
@@ -124,7 +125,7 @@ class MainUI:
 
     def getin_employee_info(self):
         self.employee_info = tk.Frame(self.window, bg='#F0F0F0')
-        employee_info(self.employee_info, self.getin_base_info, self.hd)
+        employee_info(self.employee_info, self.getin_base_info, self.hd, self.curr_operator)
         self.employee_info.pack(fill='both')
 
     def getin_customer_info(self):
@@ -165,20 +166,24 @@ class MainUI:
             if name != 'root' or pwd != 'root':
                 pass_ = self.hd.select_all('employee')
                 for item in pass_:
-                    n = item[0]
-                    p = item[4]
+                    n = str(item[0])
+                    p = str(item[4])
                     print(n, p)
-                    if name == str(n) and pwd == str(p):
+                    if name == n and pwd == p:
+                        self.curr_operator = name
                         break
                 else:
                     tk.messagebox.showerror(message='登录失败：请检查用户名和密码。')
                     return
+            else:
+                self.curr_operator = 'root'
         except Exception as e:
             print(e)
             tk.messagebox.showerror(message='登录失败：请检查用户名和密码。')
             return
         print('log: Successfully connect database.')
         print('loading tables...')
+        print('current operator:', self.curr_operator)
         self.hd.execute_script_from_file('sql/sql.txt')
         self.usr_pwd.set("")
         self.login_page.destroy()
