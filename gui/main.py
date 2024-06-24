@@ -162,12 +162,13 @@ class MainUI:
         print(pwd)
         try:
             self.hd.connect_sql('root', mysql_server_password)
-            if not name == 'root' and pwd == 'root':
+            if name != 'root' or pwd != 'root':
                 pass_ = self.hd.select_all('employee')
                 for item in pass_:
                     n = item[0]
                     p = item[4]
-                    if name == n and pwd == p:
+                    print(n, p)
+                    if name == str(n) and pwd == str(p):
                         break
                 else:
                     tk.messagebox.showerror(message='登录失败：请检查用户名和密码。')
