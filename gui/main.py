@@ -95,7 +95,7 @@ class MainUI:
 
     # 获取 login 页面
     def get_login(self):
-        self.login_page = tk.Frame(self.window, bg='#DEDBAB')
+        self.login_page = tk.Frame(self.window, bg='white')
         login_page(self.login_page, self.usr_name, self.usr_pwd, self.login_handle)
         self.login_page.pack(fill='both')
 

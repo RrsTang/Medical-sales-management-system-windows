@@ -55,7 +55,7 @@ def base_info(master, mode, hd, handle=None):
         .pack(side='top', padx=(left, right), pady=(0, 130))
     btn2 = tk.Button(menus, text='返回', font=bold_font, height=2,width=25, bd=3, fg=button_fg,
                      activebackground='white', bg='#ad0600', command=return_normal) \
-        .pack(side='top', padx=(left, right), pady=(0, 80))
+        .pack(side='top', padx=(left, right), pady=(0, 0))
     menus.pack(side='left', fill='y', expand=True)
 
 

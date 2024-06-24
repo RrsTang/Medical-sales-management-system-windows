@@ -26,7 +26,7 @@ def normal_page(master, mode, hd, handle=None):
         mode.set("sales")
         handle()
 
-    bg = '#ffffff'
+    bg = 'white'
 
     # Separator(master, orient='horizontal', bg='#9ca8b8').pack(fill='x', side='bottom')
 
@@ -40,32 +40,31 @@ def normal_page(master, mode, hd, handle=None):
     button_bg = '#44615D'
     tk.Button(menus, text='基础信息管理', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_base_info)\
-        .pack(side='top', padx=(left, right), pady=(140, 30))
+        .pack(side='top', padx=(left, right), pady=(140, 50))
     tk.Button(menus, text='库房管理', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_warehouse) \
-        .pack(side='top', padx=(left, right), pady=(0, 30))
+        .pack(side='top', padx=(left, right), pady=(0, 50))
     tk.Button(menus, text='进货管理', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_stock) \
-        .pack(side='top', padx=(left, right), pady=(0, 0))
+        .pack(side='top', padx=(left, right), pady=(0, 130))
 
-    menus.pack(side='left', fill='y', expand=True)
+    menus.pack(side='left', fill='both', expand=True)
 
     menus = tk.Frame(master, bg=bg)
     left = 45
     right = 90
     tk.Button(menus, text='销售管理', relief='raised', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_sales) \
-        .pack(side='top', padx=(left, right), pady=(140, 30))
+        .pack(side='top', padx=(left, right), pady=(140, 50))
         
     tk.Button(menus, text='报表系统', font=bold_font, height=2,width=25, bd=4, fg=button_fg,
                      activebackground='white', bg=button_bg, command=return_report) \
-        .pack(side='top', padx=(left, right), pady=(0, 30))
+        .pack(side='top', padx=(left, right), pady=(0, 50))
 
     tk.Button(menus, text='退出账户', font=bold_font, height=2, width=25, bd=4,
-                     activebackground='gray', fg="#F6FDFE",bg='#AD0600', command=return_exit).pack(side='top', padx=(left, right), pady=(0, 50))
+                     activebackground='gray', fg="#F6FDFE",bg='#AD0600', command=return_exit) \
+                     .pack(side='top', padx=(left, right), pady=(0, 0))
 
-    menus.pack(side='left', fill='y', expand=True)
+    menus.pack(side='left', fill='both', expand=True)
 
-if __name__ == '__main__':
-    window = tk.Tk()
 
