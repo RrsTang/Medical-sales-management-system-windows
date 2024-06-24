@@ -184,6 +184,7 @@ class MainUI:
         print('log: Successfully connect database.')
         print('loading tables...')
         print('current operator:', self.curr_operator)
+        self.window.title('医药销售管理系统(当前操作员：' + self.curr_operator + ')')
         self.hd.execute_script_from_file('sql/sql.txt')
         self.usr_pwd.set("")
         self.login_page.destroy()
