@@ -87,7 +87,7 @@ def warehouse(master, func, handle):
         addr = new_addr.get()
         try:
             handle.insert_warehouse(id_, addr)
-            messagebox.showerror(message='添加成功')
+            messagebox.showinfo(message='添加成功')
         except:
             messagebox.showerror(message='添加失败')
 

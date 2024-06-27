@@ -107,7 +107,7 @@ def employee_info(master, func, handle, curr_operator):
         try:
             succ = handle.add_employee(eid, name, poi, phone, passw)
             if succ:
-                messagebox.showerror(message='添加成功')
+                messagebox.showinfo(message='添加成功')
                 find_all()
             else:
                 messagebox.showerror(message='添加失败')
@@ -126,7 +126,7 @@ def employee_info(master, func, handle, curr_operator):
         try:
             succ = handle.del_employee(eid, name, poi, phone, passw)
             if succ:
-                messagebox.showerror(message='删除成功')
+                messagebox.showinfo(message='删除成功')
                 find_all()
             else:
                 messagebox.showerror(message='删除失败')
@@ -143,7 +143,7 @@ def employee_info(master, func, handle, curr_operator):
         try:
             succ = handle.change_table(eid, info, item, 'employee')
             if succ:
-                messagebox.showerror(message='更新成功')
+                messagebox.showinfo(message='更新成功')
                 find_all()
             else:
                 messagebox.showerror(message='更新失败')

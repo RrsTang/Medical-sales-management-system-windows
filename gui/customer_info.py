@@ -97,7 +97,7 @@ def customer_info(master, func, handle):
         try:
             succ = handle.add_customer(cid, name, phone)
             if succ:
-                messagebox.showerror(message='添加成功')
+                messagebox.showinfo(message='添加成功')
                 find_all()
             else:
                 messagebox.showerror(message='添加失败')
@@ -111,7 +111,7 @@ def customer_info(master, func, handle):
         try:
             succ = handle.del_customer(cid, name, phone)
             if succ:
-                messagebox.showerror(message='删除成功')
+                messagebox.showinfo(message='删除成功')
                 find_all()
             else:
                 messagebox.showerror(message='删除失败')
@@ -125,7 +125,7 @@ def customer_info(master, func, handle):
         try:
             succ = handle.change_table(cid, info, item, 'customer')
             if succ:
-                messagebox.showerror(message='更新成功')
+                messagebox.showinfo(message='更新成功')
                 find_all()
             else:
                 messagebox.showerror(message='更新失败')

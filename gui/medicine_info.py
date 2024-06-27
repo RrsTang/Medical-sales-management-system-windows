@@ -85,7 +85,7 @@ def medicine_info(master, func, handle):
         try:
             succ = handle.add_medicine(mid, name)
             if succ:
-                messagebox.showerror(message='添加成功')
+                messagebox.showinfo(message='添加成功')
                 find_all()
             else:
                 messagebox.showerror(message='添加失败')
@@ -98,7 +98,7 @@ def medicine_info(master, func, handle):
         try:
             succ = handle.del_medicine(mid, name)
             if succ:
-                messagebox.showerror(message='删除成功')
+                messagebox.showinfo(message='删除成功')
                 find_all()
             else:
                 messagebox.showerror(message='删除失败')
@@ -112,7 +112,7 @@ def medicine_info(master, func, handle):
         try:
             succ = handle.change_table(mid, name, item, 'medicine')
             if succ:
-                messagebox.showerror(message='更新成功')
+                messagebox.showinfo(message='更新成功')
                 find_all()
             else:
                 messagebox.showerror(message='更新失败')
