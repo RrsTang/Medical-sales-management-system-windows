@@ -22,4 +22,6 @@ pip install -r requirements.txt
 python gui/main.py
 ```
 
+如需测试，请在至少运行过一次主程序后使用test文件夹内的脚本进行测试
+
 若是有奇怪的框框，参考解决方案https://segmentfault.com/a/1190000022249793
