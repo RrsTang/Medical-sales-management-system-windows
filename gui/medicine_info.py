@@ -127,9 +127,9 @@ def medicine_info(master, func, handle):
     search_line = tk.Frame(master, bg='white')
     # 第一行
     tk.Label(search_line, text='药品ID:', bg='white', font=('song ti', 13)).pack(side='left', padx=(10, 0))
-    identry = tk.Entry(search_line, textvariable=medicine_id, width=25, bd=0, font=myFont, bg='lightsteelblue')
-    identry.bind('<Return>', find_by_id)
-    identry.pack(side='left', padx=(0, 15))
+    identry_id = tk.Entry(search_line, textvariable=medicine_id, width=25, bd=0, font=myFont, bg='lightsteelblue')
+    identry_id.bind('<Return>', find_by_id)
+    identry_id.pack(side='left', padx=(0, 15))
     tk.Button(search_line, text='查询', font=('song ti', 13), bd=2, command=find_by_id, fg="#F6FDFE", bg='#4ABD97') \
         .pack(side='left', padx=(0, 15))
     search_line.pack(side='top', fill='x', pady=5)    
@@ -143,9 +143,9 @@ def medicine_info(master, func, handle):
     # 第二行
     search_line0 = tk.Frame(master, bg='white')
     tk.Label(search_line0, text='药  名:', bg='white', font=('song ti', 13)).pack(side='left', padx=(10, 0))
-    identry = tk.Entry(search_line0, textvariable=medicine_name, width=25, bd=0, font=myFont, bg='lightsteelblue')
-    identry.bind('<Return>', find_by_name)
-    identry.pack(side='left', padx=(0, 15))
+    identry_name = tk.Entry(search_line0, textvariable=medicine_name, width=25, bd=0, font=myFont, bg='lightsteelblue')
+    identry_name.bind('<Return>', find_by_name)
+    identry_name.pack(side='left', padx=(0, 15))
     tk.Button(search_line0, text='查询', font=('song ti', 13), bd=2, command=find_by_name, fg="#F6FDFE", bg='#4ABD97') \
         .pack(side='left',padx=(0, 15))
     tk.Button(search_line0, text='查询所有', font=('song ti', 13), bd=2, command=find_all, fg="#F6FDFE", bg='#4ABD97') \

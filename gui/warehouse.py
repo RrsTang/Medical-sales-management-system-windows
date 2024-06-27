@@ -32,12 +32,14 @@ def warehouse(master, func, handle):
     def find_all():
         try:
             ret = handle.select_warehouse_all()
+            if len(ret) == 0:
+                print('Empty result')
+                messagebox.showerror(message='未找到相关信息')
+                return
         except:
             messagebox.showerror(message='未找到相关信息')
             return
-        if len(ret) == 0:
-            messagebox.showerror(message='未找到相关信息')
-            return
+
         print(ret)
         x = tree.get_children()
         for item in x:
@@ -88,7 +90,8 @@ def warehouse(master, func, handle):
         try:
             handle.insert_warehouse(id_, addr)
             messagebox.showinfo(message='添加成功')
-        except:
+        except Exception as e:
+            print(e)
             messagebox.showerror(message='添加失败')
 
     def back():
