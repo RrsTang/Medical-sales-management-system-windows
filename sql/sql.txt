@@ -272,7 +272,14 @@ DELIMITER ;
 
 -- # ----------------------------- 建表 --------------------------------- #
 -- insert into medicine(medicine_id,name) values (1,'Asprin'),(2,'Ibuprofen'),(3,'Redoxon');
--- insert into warehouse(warehouse_id,address) values (1,'SYSU'),(2,'SCUT'),(3,'PKU');
+DELETE warehouse
+FROM warehouse
+JOIN (
+    SELECT warehouse_id
+    FROM warehouse
+    WHERE warehouse_id IN (1, 2, 3)
+) AS w_ids ON warehouse.warehouse_id = w_ids.warehouse_id;
+insert into warehouse(warehouse_id,address) values (1,'SYSU'),(2,'SCUT'),(3,'PKU');
 -- insert into supplier(supplier_id,name,phone_number,address) values (1,'bys','10086','GZ'),(2,'xx','10016','SZ'),(3,'lhs','12315','BJ');
 -- insert into customer(customer_id,name,phone_number) values (1,'ymz','666'),(2,'csy','777'),(3,'xy','888');
 -- insert into employee(employee_id,name,position,phone_number,passw) values (1,'Adam','admin','110','1'),(2,'TZJ','admin','119','2'),(3,'ZhangWei','admin','120','3');

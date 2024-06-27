@@ -53,8 +53,8 @@ class MainUI:
         self.usr_name = tk.StringVar()
         self.usr_pwd = tk.StringVar()
         self.current_operator = None
-        print(self.usr_name)
-        print(self.usr_pwd)
+        # print(self.usr_name)
+        # print(self.usr_pwd)
 
         # -------开发参数！！！ 记得删除-----------------------------
         self.usr_name.set(username)
@@ -159,8 +159,8 @@ class MainUI:
     def login_handle(self, event=None):
         name = self.usr_name.get()
         pwd = self.usr_pwd.get()
-        print(name)
-        print(pwd)
+        print('当前操作员: ' + name)
+        # print(pwd)
         try:
             self.hd.connect_sql('root', mysql_server_password)
             if name != 'root' or pwd != 'root':
@@ -168,7 +168,7 @@ class MainUI:
                 for item in pass_:
                     n = str(item[0])
                     p = str(item[4])
-                    print(n, p)
+                    # print(n, p)
                     if name == n and pwd == p:
                         self.curr_operator = name
                         break

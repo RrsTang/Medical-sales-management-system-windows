@@ -376,7 +376,7 @@ class handler:
     def connect_sql_from_config(self):
         self.connect = sql.connect(host=cf.host,
                                    user=cf.username,
-                                   password=cf.password,
+                                   password=cf.mysql_server_password,
                                    database=cf.database,
                                    autocommit=True,
                                    charset=cf.charset)
@@ -393,6 +393,7 @@ class handler:
                 charset=cf.charset
             )
             self.cursor = self.connect.cursor()
+            # self.cursor.execute("DROP DATABASE db")
             self.cursor.execute("CREATE DATABASE IF NOT EXISTS db")
             self.cursor.execute("USE db")
             print("Connection established successfully.")
@@ -625,6 +626,12 @@ class handler:
         print(sql_)
         self.cursor.execute(sql_)
         return self.cursor.fetchall()
+
+    def test_prepare(self, _id, _table):
+        sql_ =  f"DELETE {_table} FROM {_table} JOIN (SELECT {_table}_id FROM {_table} "\
+                f"WHERE {_table}_id = {_id}) "\
+                f"AS m_id ON {_table}.{_table}_id = m_id.{_table}_id;"
+        self.cursor.execute(sql_)
 
     def __del__(self):
         if self.cursor is not None:
