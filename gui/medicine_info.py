@@ -110,13 +110,14 @@ def medicine_info(master, func, handle):
         name = change_info.get()
         item = mapp[change_item.get()]
         try:
-            succ = handle.change_medicine(mid, name, item, 'medicine')
+            succ = handle.change_table(mid, name, item, 'medicine')
             if succ:
                 messagebox.showerror(message='更新成功')
                 find_all()
             else:
                 messagebox.showerror(message='更新失败')
-        except:
+        except Exception as e:
+            print(e)
             messagebox.showerror(message='更新失败')
 
     def back():
